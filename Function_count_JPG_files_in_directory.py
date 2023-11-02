@@ -2,18 +2,18 @@
 import os
 import glob
 
-good_vials_dirs = [r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor Thesis\DATA\Good\KR40424\CAM4",
-                   r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor Thesis\DATA\Good\KR40433\CAM4",
-                   r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor Thesis\DATA\Good\KR40597\CAM4",
-                   r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor Thesis\DATA\Good\KR40655\CAM4"]
-bad_vials_dirs = [r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor Thesis\DATA\ChipB\A\CAM4",
-                  r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor Thesis\DATA\ChipB\B\CAM4",
-                  r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor Thesis\DATA\ChipB\C\CAM4",
-                  r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor Thesis\DATA\ChipB\D\CAM4",
-                  r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor Thesis\DATA\ChipB\E\CAM4",
-                  r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor Thesis\DATA\ChipB\F\CAM4",
-                  r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor Thesis\DATA\ChipB\G\CAM4",
-                  r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor Thesis\DATA\ChipB\MW63546\CAM4"]
+good_vials_dirs = [r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor_Thesis\DATA\Good\KR40424\CAM4",
+                   r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor_Thesis\DATA\Good\KR40433\CAM4",
+                   r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor_Thesis\DATA\Good\KR40597\CAM4",
+                   r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor_Thesis\DATA\Good\KR40655\CAM4"]
+bad_vials_dirs = [r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor_Thesis\DATA\ChipB\A\CAM4",
+                  r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor_Thesis\DATA\ChipB\B\CAM4",
+                  r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor_Thesis\DATA\ChipB\C\CAM4",
+                  r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor_Thesis\DATA\ChipB\D\CAM4",
+                  r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor_Thesis\DATA\ChipB\E\CAM4",
+                  r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor_Thesis\DATA\ChipB\F\CAM4",
+                  r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor_Thesis\DATA\ChipB\G\CAM4",
+                  r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor_Thesis\DATA\ChipB\MW63546\CAM4"]
 
 def count_jpg_files(directory):
     jpg_files = glob.glob(os.path.join(directory, "*.jpg"))
