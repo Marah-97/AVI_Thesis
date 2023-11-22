@@ -18,8 +18,7 @@ def extract_lbp_image(image, radius=3, n_points=24):
     lbp_image = local_binary_pattern(image, n_points, radius, method='uniform')
     return lbp_image
 
-
-def load_and_preprocess_images_labels(image_dir, label_dir, label_value, id_to_images=None):
+def load_and_preprocess_images_labels(image_dir, label_dir, label_value=1, id_to_images=None):
     image_data = []
     labels = []
 
@@ -44,14 +43,12 @@ def load_and_preprocess_images_labels(image_dir, label_dir, label_value, id_to_i
 
         # Check if a corresponding label file exists and is not empty
         label_file_path = os.path.join(label_dir, image_file.replace('.jpg', '.txt'))
-        if os.path.exists(label_file_path) and os.path.getsize(label_file_path) > 0:
+        if os.path.exists(label_file_path) and os.path.getsize(label_file_path) > 0: #label as defect #1 give it always 1
             labels.append(label_value)
         else:
             labels.append(0)  # No defect
 
     return np.array(image_data), np.array(labels)
-
-
 
 # Function to train an SVM classifier
 def train_svm(X_train, y_train):
@@ -73,7 +70,6 @@ def evaluate_svm(svm_classifier, X_test, y_test):
     print(f"F1 Score: {f1}")
     print("Confusion Matrix:")
     print(conf_matrix)
-
 
 # Function to make a decision for each vial
 def decide_vial_defect(id_to_images, svm_classifier, threshold=2):
@@ -106,7 +102,8 @@ def visualize_vial_predictions(vial_id, id_to_images, actual_labels, predicted_l
 
 
 # Data directories
-data_dir = r"C:\Users\marah\OneDrive\Documents\GitHub\datasets\coco128"
+data_dir = r"C:\Users\MOQP\OneDrive - Novo Nordisk\Documents\DTU\Bachelor Thesis\datasets\coco128"
+# data_dir = r"C:\Users\marah\OneDrive\Documents\GitHub\datasets\coco128"
 image_train_dir = os.path.join(data_dir, 'images', 'train2017')
 label_train_dir = os.path.join(data_dir, 'labels', 'train2017')
 
@@ -127,9 +124,14 @@ X_test, y_test = load_and_preprocess_images_labels(image_test_dir, label_test_di
 # Train the SVM classifier
 svm_classifier = train_svm(X_train, y_train)
 
-# Evaluate the SVM classifier on the validation set
+# Evaluate and test
 evaluate_svm(svm_classifier, X_valid, y_valid)
+evaluate_svm(svm_classifier, X_test, y_test)
 
+
+
+#########################################################################################
+#########################################################################################
 
 
 # Group images by vial ID
@@ -152,7 +154,6 @@ vial_defects_test = decide_vial_defect(id_to_images_test, svm_classifier)
 #########################################################################################
 #########################################################################################
 
-evaluate_svm(svm_classifier, X_test, y_test)
 
 
 def create_vial_label_dict(id_to_images, labels):
