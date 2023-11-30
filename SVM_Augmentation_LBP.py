@@ -22,6 +22,33 @@ import smtplib
 from email.mime.text import MIMEText
 import io
 import sys
+# - Dataset
+#    |--->Images
+#             |--->Train
+#                       |--->crop_vialID39835-cam20114170-pic00.jpg
+#                       |--->crop_vialID39835-cam20114170-pic01.jpg
+#                       ...
+#             |--->Validation
+#                       |--->crop_vialID39840-cam20114170-pic00.jpg
+#                       |--->crop_vialID39840-cam20114170-pic01.jpg
+#                       ...
+#             |--->Test
+#                       |--->crop_vialID39850-cam20114170-pic00.jpg
+#                       |--->crop_vialID39850-cam20114170-pic01.jpg
+#                       ...
+#    |--->Labels
+#             |--->Train
+#                       |--->crop_vialID39835-cam20114170-pic00.txt
+#                       |--->crop_vialID39835-cam20114170-pic01.txt
+#                       ...
+#             |--->Validation
+#                       |--->crop_vialID39840-cam20114170-pic00.txt
+#                       |--->crop_vialID39840-cam20114170-pic01.txt
+#                       ...
+#             |--->Test
+#                       |--->crop_vialID39850-cam20114170-pic00.txt
+#                       |--->crop_vialID39850-cam20114170-pic01.txt
+#                       ...
 
 
 img_size = 64 # image size that goes into SVM
