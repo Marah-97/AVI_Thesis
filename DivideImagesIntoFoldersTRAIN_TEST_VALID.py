@@ -1,53 +1,7 @@
-## The second function consider the split wrt. vialID and splitting also the labels (.txt files)
-## I did split into the main folder data from :
-## ChipB CAM4
-## A, B, C, D, E, F, G, H 
-
-## Third function for images without labels
-
-import os
-import shutil
-
-def divide_images(main_folder, train_ratio=0.7, valid_ratio=0.15, test_ratio=0.15):
-    """
-    Divides images in the main_folder into three subfolders (train, test, valid) based on the specified ratios.
-    """
-    # Paths for the subfolders
-    train_folder = os.path.join(main_folder, 'train')
-    test_folder = os.path.join(main_folder, 'test')
-    valid_folder = os.path.join(main_folder, 'valid')
-
-    # List of all images
-    images = [f for f in os.listdir(main_folder) if os.path.isfile(os.path.join(main_folder, f)) and f.lower().endswith(('.png', '.jpg', '.jpeg'))]
-
-    # Calculate the number of images for each folder
-    total_images = len(images)
-    num_train = int(total_images * train_ratio)
-    num_valid = int(total_images * valid_ratio)
-    num_test = int(total_images * test_ratio)
-
-    # Ensure the total adds up correctly, adjust if needed
-    while num_train + num_valid + num_test < total_images:
-        num_train += 1
-
-    # Function to move images
-    def move_images(start_index, end_index, destination_folder):
-        for i in range(start_index, min(end_index, len(images))):
-            shutil.move(os.path.join(main_folder, images[i]), os.path.join(destination_folder, images[i]))
-
-    # Moving images
-    move_images(0, num_train, train_folder)  # Move to train folder
-    move_images(num_train, num_train + num_valid, valid_folder)  # Move to valid folder
-    move_images(num_train + num_valid, num_train + num_valid + num_test, test_folder)  # Move to test folder
-
-    print("Images have been divided into train, test, and valid folders.")
-
-# Example usage
-# Ensure to replace 'path/to/images' with the actual path to your images folder.
-divide_images(r"C:\Users\marah\OneDrive\Documents\GitHub\YOLO_Data\images")
 
 ###################################################################################################################
 ###################################################################################################################
+## This function consider the split wrt. vialID and splitting also the labels (.txt files)
 
 import os
 import shutil
@@ -119,15 +73,14 @@ def divide_data_by_vials(data_folder, train_ratio=0.7, valid_ratio=0.15, test_ra
     print("Data has been divided into train, validation, and test folders by vial groups.")
 
 
-
-# Example usage
 divide_data_by_vials(r"C:\Users\marah\OneDrive\Documents\GitHub\data")
 
 ###################################################################################################################
 ###################################################################################################################
+## This function to do the split only for non-defectives ones (images without labels)
 
-## This function to do the split only for good ones, images without labels
-## I have done the Folder 1 KR40424 in the same folder in KID Data without copying them 
+import os
+import shutil
 
 def divide_images_by_vials(data_folder, train_ratio=0.7, valid_ratio=0.15, test_ratio=0.15):
     def ensure_dir(directory):
@@ -182,7 +135,6 @@ def divide_images_by_vials(data_folder, train_ratio=0.7, valid_ratio=0.15, test_
 
     print("Images have been divided into train, validation, and test folders by vial groups.")
 
-# Example usage
-# divide_images_by_vials(r"C:\Users\marah\OneDrive\Skrivebord\Maroooh\KID\Bachelor_Thesis\DATA\Good\KR40424")
-divide_images_by_vials(r"C:\Users\marah\OneDrive\Documents\GitHub\datasets\DATASET")
+divide_images_by_vials(r"C:\Users\marah\OneDrive\Documents\GitHub\datasets\DATASET_CAM3")
+
 
