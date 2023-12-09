@@ -1,4 +1,9 @@
-
+# create these empty folders, and move the images into #images folder, labels into #labels folder, then the path is the DataFolder, run the function.
+# - DataFolder
+#     - images
+#         - train    - test    - validation
+#     - labels
+#         - train    - test    - validation
 ###################################################################################################################
 ###################################################################################################################
 ## This function consider the split wrt. vialID and splitting also the labels (.txt files)
@@ -14,7 +19,7 @@ def divide_data_by_vials(data_folder, train_ratio=0.7, valid_ratio=0.15, test_ra
 
     # Create subdirectories if they don't exist
     subfolders = ['train', 'validation', 'test']
-    for folder in ['Images', 'Labels']:
+    for folder in ['images', 'labels']:
         for subfolder in subfolders:
             ensure_dir(os.path.join(data_folder, folder, subfolder))
 
@@ -25,12 +30,12 @@ def divide_data_by_vials(data_folder, train_ratio=0.7, valid_ratio=0.15, test_ra
                  and f.lower().endswith(file_exts)]
         vials = collections.defaultdict(list)
         for file in files:
-            vial_id = file.split('vialID')[1].split('-')[0]  # vial_id = file.split('-')[1]  #  Adjust based on your filename format
+            vial_id = file.split('vialID')[1].split('-')[0]  # vial_id = file.split('-')[1] 
             vials[vial_id].append(file)
         return vials
 
-    image_groups = list_files_and_group('Images', ('.png', '.jpg', '.jpeg'))
-    label_groups = list_files_and_group('Labels', ('.txt',))
+    image_groups = list_files_and_group('images', ('.png', '.jpg', '.jpeg'))
+    label_groups = list_files_and_group('labels', ('.txt',))
 
     # Ensure the same set of vial IDs in both images and labels
     common_vials = set(image_groups.keys()).intersection(set(label_groups.keys()))
@@ -59,16 +64,16 @@ def divide_data_by_vials(data_folder, train_ratio=0.7, valid_ratio=0.15, test_ra
     # Moving files to respective folders
     for vial_id in train_vials:
         if vial_id in image_groups:
-            move_files({vial_id: image_groups[vial_id]}, 'train', 'Images')
-            move_files({vial_id: label_groups[vial_id]}, 'train', 'Labels')
+            move_files({vial_id: image_groups[vial_id]}, 'train', 'images')
+            move_files({vial_id: label_groups[vial_id]}, 'train', 'labels')
     for vial_id in valid_vials:
         if vial_id in image_groups:
-            move_files({vial_id: image_groups[vial_id]}, 'validation', 'Images')
-            move_files({vial_id: label_groups[vial_id]}, 'validation', 'Labels')
+            move_files({vial_id: image_groups[vial_id]}, 'validation', 'images')
+            move_files({vial_id: label_groups[vial_id]}, 'validation', 'labels')
     for vial_id in test_vials:
         if vial_id in image_groups:
-            move_files({vial_id: image_groups[vial_id]}, 'test', 'Images')
-            move_files({vial_id: label_groups[vial_id]}, 'test', 'Labels')
+            move_files({vial_id: image_groups[vial_id]}, 'test', 'images')
+            move_files({vial_id: label_groups[vial_id]}, 'test', 'labels')
 
     print("Data has been divided into train, validation, and test folders by vial groups.")
 
@@ -90,17 +95,17 @@ def divide_images_by_vials(data_folder, train_ratio=0.7, valid_ratio=0.15, test_
     # Create subdirectories for images if they don't exist
     subfolders = ['train', 'validation', 'test']
     for subfolder in subfolders:
-        ensure_dir(os.path.join(data_folder, 'Images', subfolder))
+        ensure_dir(os.path.join(data_folder, 'images', subfolder))
 
     # Group images by vial ID
     def list_images_and_group():
-        image_folder = os.path.join(data_folder, 'Images')
+        image_folder = os.path.join(data_folder, 'images')
         files = [f for f in os.listdir(image_folder) 
                  if os.path.isfile(os.path.join(image_folder, f)) 
                  and f.lower().endswith(('.png', '.jpg', '.jpeg'))]
         vials = collections.defaultdict(list)
         for file in files:
-            vial_id = file.split('vialID')[1].split('-')[0]  # Adjust based on your filename format
+            vial_id = file.split('vialID')[1].split('-')[0]  
             vials[vial_id].append(file)
         return vials
 
@@ -115,8 +120,8 @@ def divide_images_by_vials(data_folder, train_ratio=0.7, valid_ratio=0.15, test_
     def move_images(file_groups, dest_folder):
         for _, file_list in file_groups.items():
             for file_name in file_list:
-                src_path = os.path.join(data_folder, 'Images', file_name)
-                dest_path = os.path.join(data_folder, 'Images', dest_folder, file_name)
+                src_path = os.path.join(data_folder, 'images', file_name)
+                dest_path = os.path.join(data_folder, 'images', dest_folder, file_name)
                 shutil.move(src_path, dest_path)
 
     # Splitting vial IDs into train, validation, and test sets
