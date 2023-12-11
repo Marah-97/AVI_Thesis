@@ -78,7 +78,7 @@ def divide_data_by_vials(data_folder, train_ratio=0.7, valid_ratio=0.15, test_ra
     print("Data has been divided into train, validation, and test folders by vial groups.")
 
 
-divide_data_by_vials(r"C:\Users\marah\OneDrive\Documents\GitHub\data")
+divide_data_by_vials(r"C:\Users\marah\OneDrive\Documents\GitHub\datasets\DATASET_CAM5")
 
 ###################################################################################################################
 ###################################################################################################################
