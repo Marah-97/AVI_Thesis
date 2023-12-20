@@ -17,11 +17,11 @@ from sklearn.linear_model import SGDClassifier
 # Loading and preprossecing the images by grouping the vials, showing the results where vials are grouped.
 # No need for future extraction as it didnt make difference.
 
-img_size = 64 # image size provided to the SVM
+img_size = 256 # image size provided to the SVM
 
 threshold=2 # this threshold is for detemining vial is defect or not. used in aggregate_vial_labels function
 
-loss='log_loss' # the loss function in SGD, non-liear
+loss='hinge' # the loss function in SGD, non-liear
 
 ################################################################################################################################################################
 ################################################################################################################################################################
@@ -58,8 +58,8 @@ def load_and_preprocess_images_labels(image_dir, label_dir, label_value=1, img_s
 
     return np.array(image_data), np.array(labels), defect_vials
 
-def train_svm(X_train, y_train):  # Function to train an SVM classifier using SGD
-    sgd_classifier = SGDClassifier(loss=loss, penalty='l2', alpha=0.0001, max_iter=1000, tol=1e-3)
+def train_svm(X_train, y_train, random_state=42):  # Function to train an SVM classifier using SGD
+    sgd_classifier = SGDClassifier(loss=loss, penalty='l2', alpha=0.0001, max_iter=1000, tol=1e-3, random_state=random_state)
     sgd_classifier.fit(X_train, y_train)
     return sgd_classifier
 
@@ -150,6 +150,33 @@ def evaluate_vial_level_plot(actual, predicted):
 
     plt.show()    
 
+def evaluate_vial_level_plot1(actual, predicted):
+    # Calculating various metrics
+    accuracy = accuracy_score(actual, predicted)
+    precision = precision_score(actual, predicted)
+    recall = recall_score(actual, predicted)
+    f1 = f1_score(actual, predicted)
+    # Generating the confusion matrix
+    conf_matrix = confusion_matrix(actual, predicted, normalize='true')
+    labels = ['non-defective', 'defective']  # 0: Good, 1: Defective
+    # Printing metrics
+    print(f"Vial Accuracy: {accuracy}")
+    print(f"Vial Precision: {precision}")
+    print(f"Vial Recall: {recall}")
+    print(f"Vial F1 Score: {f1}")
+    print("Vial Confusion Matrix:")
+    # Plotting the confusion matrix
+    fig, ax = plt.subplots(figsize=(6, 6))
+    sns.heatmap(conf_matrix, annot=True, fmt='.2f', cmap=sns.cubehelix_palette(as_cmap=True), ax=ax ,linewidth=.5, annot_kws={"size": 18})
+    # Setting labels, title, and ticks for the plot
+    ax.set_xlabel('Predicted Labels', fontsize=18)
+    ax.set_ylabel('True Labels', fontsize=18)
+    # ax.set_title('Normalized Vial Confusion Matrix', fontsize=28)
+    ax.xaxis.set_ticklabels(labels, fontsize=18)
+    ax.yaxis.set_ticklabels(labels, fontsize=18)
+    plt.show()    
+
+
 def find_misclassified_vials(actual_labels, predicted_labels, actual_defect_but_predicted_good=False):
     misclassified_vials = []
     for vial_id, actual in actual_labels.items():
@@ -176,9 +203,9 @@ def group_labels_by_vial(id_to_images, labels):
 ################################################################################################################################################################
 
 #### Load Data (validation and test for test) ####
-# data_dir = r"C:\Users\marah\OneDrive\Documents\GitHub\datasets\DATASET_CAM4"
-# data_dir = r"C:\Users\marah\OneDrive\Documents\GitHub\datasets\DATASET_CAM3"
-data_dir = r"C:\Users\marah\OneDrive\Documents\GitHub\datasets\sam_data4"
+# data_dir = r"C:\Users\marah\OneDrive\Documents\GitHub\datasets\DATASET_CAM4_1050"
+data_dir = r"C:\Users\marah\OneDrive\Documents\GitHub\datasets\DATASET_CAM3_1050"
+# data_dir = r"C:\Users\marah\OneDrive\Documents\GitHub\datasets\DATASET_CAM5_1050"
 
 image_train_dir = os.path.join(data_dir, 'images', 'train')
 label_train_dir = os.path.join(data_dir, 'labels', 'train')
@@ -218,21 +245,24 @@ print("Vials that are actually defective but predicted as good:", actual_defect_
 print("Vials that are actually good but predicted as defective:", actual_good_predicted_defect_vials)
 
 # Aggregate labels at the vial level
-vial_level_actual = aggregate_vial_labels(actual_labels_by_vial, threshold=2, label_type=      "Actual   ")
-vial_level_predicted = aggregate_vial_labels(predicted_labels_by_vial, threshold=2, label_type="Predicted")
+vial_level_actual = aggregate_vial_labels(actual_labels_by_vial,  label_type=      "Actual   ")
+vial_level_predicted = aggregate_vial_labels(predicted_labels_by_vial, label_type="Predicted")
 
 # Evaluate at the vial level and plot results
 evaluate_vial_level(vial_level_actual, vial_level_predicted)
-
 evaluate_vial_level_plot(vial_level_actual, vial_level_predicted)
+evaluate_vial_level_plot1(vial_level_actual, vial_level_predicted)
 
 
 ################################################################################################################################################################
 ################################################################################################################################################################
 # Visualize predictions for a specific vial
+# cam 5 : ['11467', '39859', '5194', '61022', '63799', '39866', '5198', '5202', '61030', '61031', '64747', '64748']
+# cam 4 : ['52753', '52791', '52799'] ,  ['52776', '63234', '5199', '52760'] 
+# cam 3 : ['63245'] , ['11466', '52743', '63924', '11468', '11473', '5197', '5198', '52776', '52793', '60991', '64745', '64748']
 # '63917', '52734' CAM4 --- '63841' CAM3 --- 
-# one_specific_vial_id = '63917'  
-# visualize_vial_predictions(one_specific_vial_id, id_to_images_test, actual_labels_by_vial[one_specific_vial_id], predicted_labels_by_vial[one_specific_vial_id])
+one_specific_vial_id = '63245'  
+visualize_vial_predictions(one_specific_vial_id, id_to_images_test, actual_labels_by_vial[one_specific_vial_id], predicted_labels_by_vial[one_specific_vial_id])
 ###################################################################################################################################################
 
 # Plotting the learning curve for SGDClassifier
@@ -298,9 +328,6 @@ plt.title('AUC(ROC curve)')
 plt.legend(loc="lower right")
 plt.grid(True)
 plt.show()
-
-
-
 
 
 

@@ -25,6 +25,6 @@ def modify_files_in_folder(folder_path):
 
 
 # main_folder_path = r"C:\Users\marah\OneDrive\Documents\GitHub\datasets\DATASET_CAM4\labels"
-main_folder_path = r'C:\Users\marah\OneDrive\Documents\GitHub\datasets\DATASET_CAM5\labels'
+main_folder_path = r'C:\Users\marah\OneDrive\Documents\GitHub\datasets\DATASET_CAM5_1050\labels'
 modify_files_in_folder(main_folder_path)
 print("Folder --- is done changing class names")
