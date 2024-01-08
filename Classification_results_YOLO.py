@@ -133,7 +133,7 @@ def calculate_overall_metrics(y_true, y_pred):
     print(f"Recall: {recall:.2f}")
     print(f"F1-Score: {f1:.2f}")
 
-iou_threshold = 0.0
+iou_threshold = 0.30
 print("iou_threshold = ",iou_threshold)
 print(image_directory)
 y_true, y_pred = classify_images_with_iou(image_directory, predicted_directory, ground_truth_directory, iou_threshold)
