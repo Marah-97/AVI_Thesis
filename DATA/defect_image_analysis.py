@@ -149,4 +149,63 @@ def plot_defective_non_defective(defective_count, non_defective_count):
 
 plot_defective_non_defective(defective_count=272, non_defective_count=1875)
 
+#################################################################################
+# Scatterplot of Bounding Box Centers and width vs height
+
+def read_yolo_annotations(folder_path):
+    data = {'x_center': [], 'y_center': [], 'width': [], 'height': []}
+    subfolders = ['train', 'test', 'validation']
+
+    for subfolder in subfolders:
+        subfolder_path = os.path.join(folder_path, subfolder)
+        for filename in os.listdir(subfolder_path):
+            if filename.endswith('.txt'):
+                with open(os.path.join(subfolder_path, filename), 'r') as file:
+                    for line in file:
+                        _, x_center, y_center, width, height = map(float, line.split())
+                        data['x_center'].append(x_center)
+                        data['y_center'].append(y_center)
+                        data['width'].append(width)
+                        data['height'].append(height)
+    return data
+
+def plot_scatter(data, x, y, title, marker_size=5, color='#A349A4'):
+    plt.scatter(data[x], data[y], s=marker_size, color=color)
+    plt.xlabel(x)
+    plt.ylabel(y)
+    # plt.xlim(0, 1)
+    # plt.ylim(0, 1)
+    plt.title(title)
+    plt.show()
+
+
+folder_path = r'C:\Users\marah\OneDrive\Documents\GitHub\datasets\DATASET_CAM3_1050\labels'
+
+# read YOLO annotations
+data = read_yolo_annotations(folder_path)
+
+# scatter plot of x_center vs y_center
+plot_scatter(data, 'x_center', 'y_center', 'Scatter Plot of Bounding Box Centers - Data for CAM3')
+
+# scatter plot of width vs height
+plot_scatter(data, 'width', 'height', 'Scatter Plot of Width vs Height of Bounding Boxes - Data for CAM3')
+#########################################################################################
+folder_path = r'C:\Users\marah\OneDrive\Documents\GitHub\datasets\DATASET_CAM4_1050\labels'
+data = read_yolo_annotations(folder_path)
+plot_scatter(data, 'x_center', 'y_center', 'Scatter Plot of Bounding Box Centers - Data for CAM4')
+plot_scatter(data, 'width', 'height', 'Scatter Plot of Width vs Height of Bounding Boxes - Data for CAM4')
+#########################################################################################
+folder_path = r'C:\Users\marah\OneDrive\Documents\GitHub\datasets\DATASET_CAM5_1050\labels'
+data = read_yolo_annotations(folder_path)
+plot_scatter(data, 'x_center', 'y_center', 'Scatter Plot of Bounding Box Centers - Data for CAM5')
+plot_scatter(data, 'width', 'height', 'Scatter Plot of Width vs Height of Bounding Boxes - Data for CAM5')
+#########################################################################################
+
+
+
+
+
+
+
+
 
